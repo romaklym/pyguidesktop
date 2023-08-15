@@ -1,0 +1,8 @@
+# Ignore Tesseract FIles (size is too big)
+/Tesseract-OCR
+
+# Ignore logs
+/logs
+
+# Ignore images
+/images
