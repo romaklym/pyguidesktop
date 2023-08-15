@@ -35,10 +35,11 @@ class GUIDesktop:
             x & y by default both 0
         """
         screen_resolution = gui.size()
+        log_debug(f"Screen resolution is: {screen_resolution}")
         screen_resolution = list(screen_resolution)
 
         region = (0, 0, screen_resolution[0], screen_resolution[1])
-        log_debug(region)
+        log_debug(f"Region is: {region}")
 
         return region
 
@@ -49,6 +50,7 @@ class GUIDesktop:
         """
 
         position = gui.position()
+        log_debug(f"Mouse position at: {position}")
 
         return position
     
@@ -59,6 +61,7 @@ class GUIDesktop:
         """
 
         coordinates_on_screen = gui.onScreen(x=x, y=y)
+        log_debug(f"Coordinates present on screen: {coordinates_on_screen}")
 
         return coordinates_on_screen
     
@@ -69,13 +72,16 @@ class GUIDesktop:
         """
 
         gui.moveTo(x=x, y=y, duration=duration, tween=tween, pause=pause)
+        log_debug(f"Moves cursor to location: x: {x}, y: {y}")
 
         sleep(timeout)
 
         if gui.position() == (x, y):
+            log_debug(f"Succesfully moved to {x}, {y}")
             return True
 
         else:
+            log_debug(f"Failed to move cursor to: {x}, {y}")
             return False
 
     def move_mouse(self, x=None, y=None, duration=0):
@@ -85,6 +91,7 @@ class GUIDesktop:
         """
 
         gui.move(x=x, y=y, duration=duration)
+        log_debug(f"Moved mouse by x pixels: {x}, and y pixels: {y}")
 
         return None
     
@@ -93,8 +100,9 @@ class GUIDesktop:
             Drags mouse to specified location on the screen.
             Format: None
         """
-
+        
         gui.dragTo(x=x, y=y, duration=duration, button=button, pause=pause)
+        log_debug(f"Drags mouse to location: x: {x}, y: {y}")
 
         return None
     
@@ -105,6 +113,7 @@ class GUIDesktop:
         """
 
         gui.drag(x=x, y=y, duration=duration, button=button)
+        log_debug(f"Drags mouse by x pixels: {x}, and y pixels: {y}")
 
         return None
     
@@ -116,6 +125,7 @@ class GUIDesktop:
 
         gui.click(clicks=clicks, interval=interval, button=button,
                   duration=duration, tween=tween, pause=pause)
+        log_debug(f"Clicks this many times: {clicks}, with this button: {button}")
 
         return None
     
@@ -127,6 +137,7 @@ class GUIDesktop:
 
         gui.doubleClick(x=x, y=y, interval=interval, button=button,
                         duration=duration, tween=tween, pause=pause)
+        log_debug(f"Double clicks at x: {x}, y: {y} with this button: {button}")
 
         return None
     
@@ -138,6 +149,7 @@ class GUIDesktop:
 
         gui.mouseDown(x=x, y=y, button=button, duration=duration,
                       tween=tween, pause=pause)
+        log_debug(f"Pressed mouse down at x: {x}, y: {y} with this button: {button}")
 
         return None
     
@@ -149,6 +161,7 @@ class GUIDesktop:
 
         gui.mouseUp(x=x, y=y, button=button, duration=duration,
                     tween=tween, pause=pause)
+        log_debug(f"Released mouse at x: {x}, y: {y} with this button: {button}")
 
         return None
 
@@ -159,6 +172,7 @@ class GUIDesktop:
         """
 
         gui.scroll(clicks=clicks, x=x, y=y, pause=pause)
+        log_debug(f"Scrolled mousethis many clicks: {clicks}")
 
         return None
 
@@ -176,11 +190,11 @@ class GUIDesktop:
             region = (0, 0, int(screen_resolution[0]), int(screen_resolution[1]))
 
         screenshot_path = os.path.join(self.folder_path, f"{screenshot_name}.png")
+        log_debug(f"Screenshot path : {screenshot_path}")
         screenshot = gui.screenshot(region=region)
+        
         sleep(self.timeout)
         screenshot.save(screenshot_path)
-        
-        # screenshot = screenshot.resize((screenshot.size[0] * resize, screenshot.size[1] * resize))
 
         log_debug(f"Screenshots saved in folder: {self.folder_path}, with size: {list(screenshot.size)}")
 

@@ -17,9 +17,8 @@ class PyGUIDesktop(GUIDesktop):
         super().__init__()
         
     pyt.pytesseract.tesseract_cmd = 'C:/Users/klyms/Python_Projects/pyguidesktop/Tesseract-OCR/tesseract.exe'
-    config = r'--oem 3 --psm 6 -c tessedit_char_whitelist=qwertyuiopasdfghjklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM'
 
-    def find_text_and_click(self, text, click_type=gui.PRIMARY, click_duration=0.1, region=None, config=config):
+    def find_text_and_click(self, text, click_type=gui.PRIMARY, click_duration=0.1, region=None, config=None):
         """
         Find the specified text on the screen using pytesseract and click in the middle of the found text.
 
@@ -30,6 +29,9 @@ class PyGUIDesktop(GUIDesktop):
         :return: True if text is found and clicked, False otherwise.
         """
         
+        if config is None:
+            config = config = r'--oem 3 --psm 6 -c tessedit_char_blacklist=$'
+        
         if region is None:
             screen_resolution = gui.size()
             region = (0, 0, screen_resolution[0], screen_resolution[1])
@@ -37,6 +39,7 @@ class PyGUIDesktop(GUIDesktop):
         sleep(self.timeout)
 
         screenshot = self.make_screenshot(region=region)
+        log_debug(f"Made screenshot: '{screenshot}'")
         gray_image = self.save_gray_image(screenshot=screenshot)
         thresh = self.thresholding(gray_image)
         
@@ -77,7 +80,10 @@ class PyGUIDesktop(GUIDesktop):
                         gui.click(x=x_center, y=y_center, clicks=1, button=click_type, duration=click_duration)
         
         else:
+            log_debug(f"Failed to find word '{target_text}'")
             return False
+        
+    
 
 
         

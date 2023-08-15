@@ -6,3 +6,6 @@
 
 # Ignore images
 /images
+
+# Ignore PipFile.lock
+Pipfile.lock

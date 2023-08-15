@@ -1,7 +1,5 @@
 from .pyguidesktop import PyGUIDesktop
 from time import sleep
-import os, logging
-from datetime import datetime
 from .logger import log_debug, log_error
 
 def main():
@@ -11,8 +9,8 @@ def main():
         
         pgd = PyGUIDesktop()
         pgd.make_screenshot("basic_screenshot")
-        # TODO: fix location since it clicks on small screenshot
-        pgd.find_text_and_click(text="Run Terminal")
+        # TODO: make it work for multiple words
+        pgd.find_text_and_click(text="Run")
 
         log_debug("Script completed successfully")
         
