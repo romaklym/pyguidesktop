@@ -8,9 +8,11 @@ def main():
         log_debug("Script started")
         
         pgd = PyGUIDesktop()
-        pgd.make_screenshot("basic_screenshot")
-        # TODO: make it work for multiple words
-        pgd.find_text_and_click(text="Run")
+        # pgd.make_screenshot("basic_screenshot")
+        # # TODO: make it work for multiple words
+        # pgd.find_text_and_click(text="Run")
+        pgd.get_active_window()
+        pgd.template_matching()
 
         log_debug("Script completed successfully")
         

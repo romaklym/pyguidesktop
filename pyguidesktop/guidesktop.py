@@ -200,6 +200,31 @@ class GUIDesktop:
 
         return screenshot
     
+    def save_screenshot(self, screenshot_name=default_screenshot, region=region, resize=resize):
+        """
+        Creates a screenshot and saves it in a new folder with the current date and time as the name, but 
+        returns a path to that folder with a name of the image.
+
+        :param screenshot_name: Name of the screenshot file (without extension).
+        :param region: The region of the screen to capture (left, top, width, height).
+        :return: The captured screenshot object.
+        """
+
+        if region is None:
+            screen_resolution = gui.size()
+            region = (0, 0, int(screen_resolution[0]), int(screen_resolution[1]))
+
+        screenshot_path = os.path.join(self.folder_path, f"{screenshot_name}.png")
+        log_debug(f"Screenshot path : {screenshot_path}")
+        screenshot = gui.screenshot(region=region)
+        
+        sleep(self.timeout)
+        screenshot.save(screenshot_path)
+
+        log_debug(f"Screenshots saved in folder: {self.folder_path}, with size: {list(screenshot.size)}")
+
+        return screenshot_path
+    
     def save_gray_image(self, screenshot, screenshot_name=default_screenshot):
         """
         Creates a gray screenshot and saves it into folder with the current date and time as the name.
@@ -234,6 +259,7 @@ class GUIDesktop:
         
         window = win32gui.GetForegroundWindow()
         active_window_name = win32gui.GetWindowText(window)
+        log_debug(f"Active window name: {active_window_name}")
 
         return active_window_name
     

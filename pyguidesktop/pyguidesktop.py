@@ -13,8 +13,10 @@ from .logger import log_debug
 
 
 class PyGUIDesktop(GUIDesktop):
+    
     def __init__(self):
         super().__init__()
+        
         
     pyt.pytesseract.tesseract_cmd = 'C:/Users/klyms/Python_Projects/pyguidesktop/Tesseract-OCR/tesseract.exe'
 
@@ -82,6 +84,64 @@ class PyGUIDesktop(GUIDesktop):
         else:
             log_debug(f"Failed to find word '{target_text}'")
             return False
+    
+    
+    def template_matching(self, image_path=None, region=None):
+        """
+        Find the specified text on the screen using pytesseract and click in the middle of the found text.
+
+        :param text: The text to search for.
+        :param click_type: The type of mouse click to perform (PRIMARY or SECONDARY).
+        :param click_duration: The duration of the mouse click.
+        :param region: The region of the screen to search for the text (left, top, width, height).
+        :return: True if text is found and clicked, False otherwise.
+        """
+        
+        if image_path is None:
+            assets_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets')
+            image_filename = 'test.png'
+            image_path = os.path.join(assets_dir, image_filename)
+            
+            source_image = cv2.imread(image_path, cv2.COLOR_BGR2GRAY)
+            log_debug(f"Source image for template matching {source_image}")
+        else:
+            source_image = cv2.imread(image_path, cv2.COLOR_BGR2GRAY)
+            log_debug(f"Source image for template matching {source_image}")
+            
+        if region is None:
+            screen_resolution = gui.size()
+            region = (0, 0, screen_resolution[0], screen_resolution[1])
+        
+        screenshot = self.save_screenshot(screenshot_name="screenshot_template_matching", region=region)
+        log_debug(f"Screenshot for template matching {screenshot}")
+        screen_image = cv2.imread(screenshot, cv2.COLOR_BGR2GRAY)
+        log_debug(f"Reading screenshot for template matching with cv2: {screen_image}")
+        
+        result = cv2.matchTemplate(screen_image, source_image, cv2.TM_CCORR_NORMED)
+        log_debug(f"Match template function result: {result}")
+        
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        
+        h = source_image.shape[0]
+        w = source_image.shape[1]
+        
+        a, b = max_loc
+        c, d = max_loc[0] + w, max_loc[1] + h
+        
+        height = d - b
+        width = c - a
+        rectangle_size = width, height
+        
+        final_result = max_loc + rectangle_size
+        log_debug(f"Final coordinates for found image at: {final_result}")
+        
+        cv2.rectangle(screen_image, max_loc, (max_loc[0] + w, max_loc[1] + h), (0, 255, 255), 2)
+        cv2.imwrite(self.folder_path+"\\template_matched.png", screen_image)
+        
+        cv2.imshow("Final", screen_image)
+        cv2.waitKey()
+        
+        return final_result
         
     
 
