@@ -12,7 +12,7 @@ def main():
         # # TODO: make it work for multiple words
         # pgd.find_text_and_click(text="Run")
         pgd.get_active_window()
-        pgd.template_matching()
+        pgd.find_image_on_screen_and_click()
 
         log_debug("Script completed successfully")
         

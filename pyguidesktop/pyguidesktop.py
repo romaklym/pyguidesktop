@@ -10,6 +10,7 @@ import cv2
 from time import sleep
 from PIL import Image
 from .logger import log_debug
+from PIL import ImageGrab
 
 
 class PyGUIDesktop(GUIDesktop):
@@ -86,15 +87,12 @@ class PyGUIDesktop(GUIDesktop):
             return False
     
     
-    def template_matching(self, image_path=None, region=None):
+    def find_image_on_screen_and_click(self, image_path=None, region=None):
         """
-        Find the specified text on the screen using pytesseract and click in the middle of the found text.
+        Find the image on the screen using pytesseract and click in the middle of the found image.
 
-        :param text: The text to search for.
-        :param click_type: The type of mouse click to perform (PRIMARY or SECONDARY).
-        :param click_duration: The duration of the mouse click.
-        :param region: The region of the screen to search for the text (left, top, width, height).
-        :return: True if text is found and clicked, False otherwise.
+        :param image_path: The path to the image to search for.
+        :param region: The region of the screen to search for the image (left, top, width,height).
         """
         
         if image_path is None:
@@ -135,16 +133,22 @@ class PyGUIDesktop(GUIDesktop):
         final_result = max_loc + rectangle_size
         log_debug(f"Final coordinates for found image at: {final_result}")
         
+        x_click = final_result[0] + (rectangle_size[0] // 2)
+        y_click = final_result[1] + (rectangle_size[1] // 2)
+        
+        gui.click(x_click, y_click, clicks=1, button=gui.PRIMARY, duration=0.1)
+        
         cv2.rectangle(screen_image, max_loc, (max_loc[0] + w, max_loc[1] + h), (0, 255, 255), 2)
         cv2.imwrite(self.folder_path+"\\template_matched.png", screen_image)
         
-        cv2.imshow("Final", screen_image)
-        cv2.waitKey()
-        
-        return final_result
-        
+        return log_debug(f"Found image at: ({x_click}, {y_click})")
     
 
 
-        
+
+                        
+                    
+
+
+                
 

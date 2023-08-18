@@ -335,3 +335,9 @@ class GUIDesktop:
         log_debug(f"Screenshots saved in folder: {canny_path}")
         
         return canny
+    
+    def hex_to_rgb(self, hex_color):
+        hex_color = hex_color.lstrip("#")
+        log_debug(f"hex color: {hex_color}, to rgb: {tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))}")
+        
+        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
