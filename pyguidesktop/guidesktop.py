@@ -247,8 +247,89 @@ class GUIDesktop:
         """
 
         message_typed = gui.write(message=message, interval=interval)
+        log_debug(f"Message written: {message_typed}")
 
         return message_typed
+    
+    def pixel_color(self, x, y):
+        """
+            Returns a list of RGB value of a given pixel on the screen.
+        """
+        pixel_color = gui.pixel(x, y)
+        
+        red = pixel_color.red
+        green = pixel_color.green
+        blue = pixel_color.blue
+        log_debug(f"RGB value of given pixel: {red}, {green}, {blue}")
+
+        return [red, green, blue]
+    
+    def pixel_matching(self, x, y, rgb_value=list):
+        """
+            Checks if a given pixel RGB values match with the pixel in x, y coordinates
+        """
+        pixel_color = gui.pixel(x, y)
+        gui.pixelMatchesColor
+        
+        red = pixel_color.red
+        green = pixel_color.green
+        blue = pixel_color.blue
+        log_debug(f"RGB value of given pixel: {red}, {green}, {blue}")
+        
+        if [red, green, blue] == [rgb_value[0], rgb_value[1], rgb_value[2]]:
+            log_debug(f"RGB value target: {rgb_value[0]}, {rgb_value[1]}, {rgb_value[2]}")
+            return True
+        else:
+            return False
+        
+    def _is_hex_color(self, color):
+        return isinstance(color, str) and len(color) == 7 and color[0] == '#' and all(c in '0123456789abcdefABCDEF' for c in color[1:])
+
+    def _is_rgb_color(self, color):
+        return isinstance(color, tuple) and len(color) == 3 and all(isinstance(c, int) and 0 <= c <= 255 for c in color)
+        
+    def color_present_on_screen(self, image, color, hex=True, rgb=False):
+        """
+            Checks if a given color is present on the screen.
+            :param image: Path to image to check.
+            :param color: Color to check. Checks HEX by default, so value has to be given in HEX style format: #FFF000.
+            If you want to check RGB values, you have to give it as a tuple of 3 integers
+            :param hex: If True, checks if the color is in HEX format.
+            :param rgb: If True, checks if the color is in RGB format.
+        """
+        if hex and rgb:
+            raise ValueError("Cannot have both rgb and hex values at the same time.")
+        
+        if hex and not self._is_hex_color(color):
+            raise ValueError("Hex color should be in the format '#RRGGBB'")
+
+        if rgb and not self._is_rgb_color(color):
+            raise ValueError("RGB color should be a tuple of 3 integers between 0 and 255")
+        
+        image = cv2.imread(image)
+        image_array = np.array(image)
+        
+        if hex:
+            color_values = []
+
+            for row in image_array:
+                for pixel in row:
+                    hex_color = '#{0:02x}{1:02x}{2:02x}'.format(pixel[2], pixel[1], pixel[0])
+                    color_values.append(hex_color)
+
+            return color in color_values
+
+        if rgb:
+            color_values = []
+
+            for row in image_array:
+                for pixel in row:
+                    rgb_color = tuple(pixel[::-1])
+                    color_values.append(rgb_color)
+
+            return color in color_values
+
+        return False
     
     def get_active_window(self):
         """
@@ -279,6 +360,9 @@ class GUIDesktop:
         return th3
     
     def remove_noise(self, screenshot, screenshot_name=default_screenshot):
+        """
+            Removing noise in image
+        """
         removed_noise = cv2.medianBlur(screenshot, 5)
         
         removed_noise_path = os.path.join(self.folder_path, f"{screenshot_name}_removed_noise.png")
@@ -288,6 +372,9 @@ class GUIDesktop:
         return removed_noise
 
     def thresholding(self, screenshot, screenshot_name=default_screenshot):
+        """
+            Using thresholding on image
+        """
         
         threshold_image = cv2.threshold(screenshot, self.BINARY_THREHOLD, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
@@ -298,6 +385,9 @@ class GUIDesktop:
         return threshold_image
 
     def dilate(self, screenshot, screenshot_name=default_screenshot):
+        """
+            Image Dilation
+        """
         kernel = np.ones((5, 5), np.uint8)
         dilated = cv2.dilate(screenshot, kernel, iterations = 1)
         
@@ -308,6 +398,9 @@ class GUIDesktop:
         return dilated
     
     def erode(self, screenshot, screenshot_name=default_screenshot):
+        """
+            Image Erosion
+        """
         kernel = np.ones((5,5), np.uint8)
         eroded = cv2.erode(screenshot, kernel, iterations = 1)
         
@@ -318,6 +411,9 @@ class GUIDesktop:
         return eroded
 
     def opening(self, screenshot, screenshot_name=default_screenshot):
+        """
+            Performing Morphology on image
+        """
         kernel = np.ones((5,5),np.uint8)
         morphology = cv2.morphologyEx(screenshot, cv2.MORPH_OPEN, kernel)
         
@@ -328,6 +424,9 @@ class GUIDesktop:
         return morphology
 
     def canny(self, screenshot, screenshot_name=default_screenshot):
+        """
+            Performing canny on image
+        """
         canny = cv2.Canny(screenshot, 100, 200)
         
         canny_path = os.path.join(self.folder_path, f"{screenshot_name}_cannyy.png")
@@ -337,7 +436,12 @@ class GUIDesktop:
         return canny
     
     def hex_to_rgb(self, hex_color):
+        """
+            Changing hex color value to rgb color
+        """
         hex_color = hex_color.lstrip("#")
         log_debug(f"hex color: {hex_color}, to rgb: {tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))}")
         
         return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+    
+    
