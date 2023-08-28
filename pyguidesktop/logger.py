@@ -1,5 +1,6 @@
 import os
 import logging
+import traceback
 from datetime import datetime
 
 
@@ -19,4 +20,5 @@ def log_debug(message):
     logging.debug(message)
     
 def log_error(exception):
-    logging.error(f"An error occurred: {str(exception)}")
+    exception_info = traceback.format_exc()
+    logging.error(f"An error occurred:\n{exception_info}")

@@ -18,8 +18,14 @@ class PyGUIDesktop(GUIDesktop):
     def __init__(self):
         super().__init__()
         
+        if not os.path.exists(self.folder_path):
+            print(f"Creating directory: {self.folder_path}")
+            os.makedirs(self.folder_path)
+        else:
+            print(f"Directory already exists: {self.folder_path}")
         
-    pyt.pytesseract.tesseract_cmd = '[YOUR_PATH]/pyguidesktop/Tesseract-OCR/tesseract.exe'
+        
+    pyt.pytesseract.tesseract_cmd = 'C:/Users/klyms/Python_Projects/pyguidesktop/Tesseract-OCR/tesseract.exe'
 
     def find_text_and_click(self, text, click_type=gui.PRIMARY, click_duration=0.1, region=None, config=None):
         """

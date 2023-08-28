@@ -4,12 +4,14 @@ import sys, os
 from datetime import datetime
 import win32gui
 from time import sleep
+import time
 import cv2
 from .logger import log_debug
 
 
 class GUIDesktop:
     def __init__(self):
+            
         package_dir = os.path.dirname(os.path.abspath(__file__))
         main_folder = os.path.dirname(package_dir)
         self.screenshots_dir = os.path.join(main_folder, "images")
@@ -20,7 +22,7 @@ class GUIDesktop:
         self.timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")
         self.folder_path = os.path.join(self.screenshots_dir, self.timestamp)
         os.makedirs(self.folder_path)
-        self.BINARY_THREHOLD = 120
+        self.BINARY_THRESHOLD = 120
     
     default_screenshot = "screenshot"
     region = (0, 0, gui.size()[0], gui.size()[1])
@@ -77,7 +79,7 @@ class GUIDesktop:
         sleep(timeout)
 
         if gui.position() == (x, y):
-            log_debug(f"Succesfully moved to {x}, {y}")
+            log_debug(f"Successfully moved to {x}, {y}")
             return True
 
         else:
@@ -172,7 +174,7 @@ class GUIDesktop:
         """
 
         gui.scroll(clicks=clicks, x=x, y=y, pause=pause)
-        log_debug(f"Scrolled mousethis many clicks: {clicks}")
+        log_debug(f"Scrolled mouse this many clicks: {clicks}")
 
         return None
 
@@ -257,9 +259,9 @@ class GUIDesktop:
         """
         pixel_color = gui.pixel(x, y)
         
-        red = pixel_color.red
-        green = pixel_color.green
-        blue = pixel_color.blue
+        red = pixel_color[0]
+        green = pixel_color[1]
+        blue = pixel_color[2]
         log_debug(f"RGB value of given pixel: {red}, {green}, {blue}")
 
         return [red, green, blue]
@@ -269,11 +271,10 @@ class GUIDesktop:
             Checks if a given pixel RGB values match with the pixel in x, y coordinates
         """
         pixel_color = gui.pixel(x, y)
-        gui.pixelMatchesColor
         
-        red = pixel_color.red
-        green = pixel_color.green
-        blue = pixel_color.blue
+        red = pixel_color[0]
+        green = pixel_color[1]
+        blue = pixel_color[2]
         log_debug(f"RGB value of given pixel: {red}, {green}, {blue}")
         
         if [red, green, blue] == [rgb_value[0], rgb_value[1], rgb_value[2]]:
@@ -288,7 +289,7 @@ class GUIDesktop:
     def _is_rgb_color(self, color):
         return isinstance(color, tuple) and len(color) == 3 and all(isinstance(c, int) and 0 <= c <= 255 for c in color)
         
-    def color_present_on_screen(self, image, color, hex=True, rgb=False):
+    def color_present_on_screen(self, color, image=None, hex=True, rgb=False):
         """
             Checks if a given color is present on the screen.
             :param image: Path to image to check.
@@ -301,13 +302,19 @@ class GUIDesktop:
             raise ValueError("Cannot have both rgb and hex values at the same time.")
         
         if hex and not self._is_hex_color(color):
-            raise ValueError("Hex color should be in the format '#RRGGBB'")
+            raise ValueError("Hex color should be in the format '#FFF000'")
 
         if rgb and not self._is_rgb_color(color):
             raise ValueError("RGB color should be a tuple of 3 integers between 0 and 255")
         
-        image = cv2.imread(image)
-        image_array = np.array(image)
+        if image is None:
+            image_path = self.save_screenshot()
+        
+            image = cv2.imread(image_path)
+            image_array = np.array(image)
+        else:
+            image = cv2.imread(image)
+            image_array = np.array(image)
         
         if hex:
             color_values = []
@@ -315,9 +322,10 @@ class GUIDesktop:
             for row in image_array:
                 for pixel in row:
                     hex_color = '#{0:02x}{1:02x}{2:02x}'.format(pixel[2], pixel[1], pixel[0])
-                    color_values.append(hex_color)
+                    color_values.append(hex_color.upper())
 
-            return color in color_values
+            log_debug(f"Color present: {color.upper() in color_values}")
+            return color.upper() in color_values
 
         if rgb:
             color_values = []
@@ -325,10 +333,12 @@ class GUIDesktop:
             for row in image_array:
                 for pixel in row:
                     rgb_color = tuple(pixel[::-1])
-                    color_values.append(rgb_color)
+                    color_values.append(rgb_color.upper())
 
-            return color in color_values
-
+            log_debug(f"Color present: {color.upper() in color_values}")
+            return color.upper() in color_values
+        
+        log_debug("Color not present on screen")
         return False
     
     def get_active_window(self):
@@ -344,11 +354,29 @@ class GUIDesktop:
 
         return active_window_name
     
+    def is_window_active(self, desired_window):
+        """
+        Check if a specific window is currently active.
+        """
+        active_window_name = self.get_active_window()
+        return active_window_name == desired_window
+    
+    def wait_for_app_activation(self, window_title, timeout=300):
+        """
+        Wait for a specific application window to become active within a timeout.
+        """
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            if self.is_window_active(window_title):
+                return True
+            time.sleep(1)
+        return False
+    
     def image_processing(self, screenshot, screenshot_name=default_screenshot):
         """
             Image Processing
         """
-        ret1, th1 = cv2.threshold(screenshot, self.BINARY_THREHOLD, 255, cv2.THRESH_BINARY_INV)
+        ret1, th1 = cv2.threshold(screenshot, self.BINARY_THRESHOLD, 255, cv2.THRESH_BINARY_INV)
         ret2, th2 = cv2.threshold(th1, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
         blur = cv2.GaussianBlur(th2, (1, 1), 0)
         ret3, th3 = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
@@ -376,7 +404,7 @@ class GUIDesktop:
             Using thresholding on image
         """
         
-        threshold_image = cv2.threshold(screenshot, self.BINARY_THREHOLD, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+        threshold_image = cv2.threshold(screenshot, self.BINARY_THRESHOLD, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
         
         threshold_path = os.path.join(self.folder_path, f"{screenshot_name}_thresholded.png")
         cv2.imwrite(threshold_path, threshold_image)
@@ -429,7 +457,7 @@ class GUIDesktop:
         """
         canny = cv2.Canny(screenshot, 100, 200)
         
-        canny_path = os.path.join(self.folder_path, f"{screenshot_name}_cannyy.png")
+        canny_path = os.path.join(self.folder_path, f"{screenshot_name}_canny.png")
         cv2.imwrite(canny_path, canny)
         log_debug(f"Screenshots saved in folder: {canny_path}")
         
