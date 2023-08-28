@@ -29,3 +29,31 @@ Current setup:
 - ✔️ You are ready to use PyGUIDesktop
 - 📍 Work can be done is test.py
 - 🟢 To execute script run main.py
+
+Structure of the project:
+PyGUIDesktop/
+│
+├── assets/
+│   └── # Images and files we use as templates (for template_matching for example)
+├── images/
+│   └── # Screenshots and images used in the project
+├── logs/
+│   └── # Logs that will be generated after main.py run
+│
+├── pyguidesktop/
+│   ├── __init__.py
+│   ├── guidedesktop.py
+│   ├── pyguidesktop.py
+│   ├── logger.py
+│   └── tests.py
+│
+├── Tesseract-OCR/
+│   ├── tesseract.exe
+│   └── ...
+│
+├── .gitignore
+├── main.py
+├── Pipfile
+├── Pipfile.lock
+├── README.md
+└── setup_venv.bat

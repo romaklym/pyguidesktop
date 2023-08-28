@@ -9,3 +9,6 @@
 
 # Ignore PipFile.lock
 Pipfile.lock
+
+# Ignore pycache
+__pycache__/
