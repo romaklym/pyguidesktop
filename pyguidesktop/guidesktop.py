@@ -248,6 +248,23 @@ class GUIDesktop:
 
         return screenshot_path
     
+    def upload_image(self, image, screenshot_name=default_screenshot):
+        """
+        Saves images that already exist to runs images folder with the current date and time as the name.
+        """
+        
+        screenshot_path = os.path.join(self.folder_path, f"{screenshot_name}.png")
+        log_debug(f"Screenshot path : {screenshot_path}")
+        
+        uploaded_image = cv2.imwrite(screenshot_path, image)
+
+        if uploaded_image:
+            log_debug(f"Image saved in: '{screenshot_path}'")
+            return True
+        else:
+            log_debug("Image save failed")
+            return False
+    
     def save_gray_image(self, screenshot, screenshot_name=default_screenshot):
         """
         Creates a gray screenshot and saves it into folder with the current date and time as the name.
@@ -493,4 +510,37 @@ class GUIDesktop:
         
         return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
     
+    def hough_lines(self, image=None, threshold=90, min_line_length=20, max_line_gap=40, canny_thres_1=100, canny_thres_2=150):
+        """
+        Detects lines in an image using Hough transform.
+
+        Args:
+            image (str): image path
+            threshold (int): threshold value
+            min_line_length (int): min line length value
+            max_line_gap (int): max line gap value
+        """
+        if image is None:
+            new_screenshot = self.save_screenshot(screenshot_name="hough_lines_on_image")
+        
+            image = cv2.imread(new_screenshot)
+            image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            image = cv2.imread(image)
+            image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        
+        lines = cv2.Canny(image_gray, canny_thres_1, canny_thres_2)
+        
+        lines = cv2.HoughLinesP(lines, 1, np.pi/180, threshold=threshold, minLineLength=min_line_length, maxLineGap=max_line_gap)
+        
+        all_lines_coords = []
+        for line in lines:
+            x1, y1, x2, y2 = line[0]
+            all_lines_coords.append((x1, y1, x2, y2))
+            cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        
+        log_debug(f"All lines coordinates: {all_lines_coords}")
+        self.upload_image(image=image, screenshot_name="all_lines_on_image")
+        
+        return all_lines_coords 
     
