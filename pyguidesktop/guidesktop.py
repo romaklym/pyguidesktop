@@ -7,6 +7,8 @@ from time import sleep
 import time
 import cv2
 from .logger import log_debug
+import subprocess
+import winreg
 
 
 class GUIDesktop:
@@ -29,6 +31,25 @@ class GUIDesktop:
     timeout = 0.5
     screen_resolution = list(gui.size())
     resize = 2
+    
+    def get_app_path(self, app_name):
+        try:
+            with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths") as key:
+                app_key_path = winreg.QueryValue(key, app_name)
+                return app_key_path
+        except FileNotFoundError:
+            print(f"Application '{app_name}' not found in the registry.")
+            return None
+
+    def launch_app(self, app_path):
+        if not app_path:
+            raise ValueError("App path is empty or None.")
+        
+        try:
+            subprocess.Popen(app_path)
+            print(f"Launched app: {app_path}")
+        except Exception as e:
+            print(f"Error launching app: {e}")
 
     def screen_resolution(self):
         """

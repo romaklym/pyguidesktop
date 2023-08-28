@@ -9,7 +9,7 @@ def main():
         
         pgd = PyGUIDesktop()
         
-        desired_window = "main.py - pyguidesktop - Visual Studio Code"
+        desired_window = "Steam"
         timeout = 60
         
         # Checks if the desired window becomes active within a timeout
@@ -36,6 +36,8 @@ def main():
 # Main code logic to perform actions
 def play(pgd):
     
+    app_path = r"C:\Program Files (x86)\Steam\steam.exe"
+    pgd.launch_app(app_path)
     pgd.find_text_and_click("Run")
     pgd.get_active_window()
     pgd.find_image_on_screen_and_click()
