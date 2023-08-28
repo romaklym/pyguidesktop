@@ -22,7 +22,7 @@ Requirements:
 Current setup:
 - 📩 Download or Clone Application to your working directory.
 
-```git clone https://github.com/romaklym/pyguidesktop.git```
+`git clone https://github.com/romaklym/pyguidesktop.git`
 - 🗑️ Delete .venv Folder & Pipfile.lock File (if they exist).
 - 🏃‍♀️ Run setup_venv.bat file (double-click on the file).
 - ⬇️ Download Tesseract and place it in Tesseract-OCR folder in the root directory of the project.
@@ -59,6 +59,4 @@ Structure of the project:
 ├── Pipfile.lock
 ├── README.md
 └── setup_venv.bat
-
-5 directories, 6 files
 ```
