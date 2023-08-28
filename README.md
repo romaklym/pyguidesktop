@@ -21,6 +21,7 @@ Requirements:
 
 Current setup:
 - 📩 Download or Clone Application to your working directory.
+
 ```git clone https://github.com/romaklym/pyguidesktop.git```
 - 🗑️ Delete .venv Folder & Pipfile.lock File (if they exist).
 - 🏃‍♀️ Run setup_venv.bat file (double-click on the file).
