@@ -3,7 +3,7 @@
 
 ### 🚧 Framework is under construction 🚧
 
-Desktop Automation Application build with Python 🐍
+Desktop Automation Application built with Python 🐍
 
 Built using next libraries:
 - 🦾 PyAutoGUI
