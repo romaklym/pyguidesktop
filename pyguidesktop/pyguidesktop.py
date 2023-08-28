@@ -19,7 +19,7 @@ class PyGUIDesktop(GUIDesktop):
         super().__init__()
         
         
-    pyt.pytesseract.tesseract_cmd = 'C:/Users/klyms/Python_Projects/pyguidesktop/Tesseract-OCR/tesseract.exe'
+    pyt.pytesseract.tesseract_cmd = '[YOUR_PATH]/pyguidesktop/Tesseract-OCR/tesseract.exe'
 
     def find_text_and_click(self, text, click_type=gui.PRIMARY, click_duration=0.1, region=None, config=None):
         """
