@@ -21,14 +21,15 @@ Requirements:
 
 Current setup:
 - 📩 Download or Clone Application to your working directory.
-- 🗑️ Delete .venv Folder & Pipfile.lock File.
-- 🏃‍♀️ Run setup_venv.bat file.
+```git clone https://github.com/romaklym/pyguidesktop.git```
+- 🗑️ Delete .venv Folder & Pipfile.lock File (if they exist).
+- 🏃‍♀️ Run setup_venv.bat file (double-click on the file).
 - ⬇️ Download Tesseract and place it in Tesseract-OCR folder in the root directory of the project.
         You can find it here: https://github.com/UB-Mannheim/tesseract/wiki (Under: The latest installer can be downloaded here)
 
 - ✔️ You are ready to use PyGUIDesktop
 - 📍 Work can be done is test.py
-- 🟢 To execute script run main.py
+- 🟢 To execute script run: main.py
 
 Structure of the project:
 ```PyGUIDesktop/
