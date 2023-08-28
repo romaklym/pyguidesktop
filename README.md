@@ -31,6 +31,8 @@ Current setup:
 - 🟢 To execute script run main.py
 
 Structure of the project:
+$ tree
+.
 PyGUIDesktop/
 │
 ├── assets/
@@ -57,3 +59,5 @@ PyGUIDesktop/
 ├── Pipfile.lock
 ├── README.md
 └── setup_venv.bat
+
+5 directories, 6 files
