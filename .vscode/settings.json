@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
+        "CCORR",
+        "levelname",
         "OTSU",
         "pytesseract",
+        "tessedit",
         "thresholded",
         "thresholding"
     ]

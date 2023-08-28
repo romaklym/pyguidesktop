@@ -25,7 +25,13 @@ class PyGUIDesktop(GUIDesktop):
             print(f"Directory already exists: {self.folder_path}")
         
         
-    pyt.pytesseract.tesseract_cmd = 'C:/Users/klyms/Python_Projects/pyguidesktop/Tesseract-OCR/tesseract.exe'
+    script_path = os.path.dirname(os.path.abspath(__file__))
+    project_folder = os.path.dirname(script_path)
+    tesseract_folder = os.path.join(project_folder, 'Tesseract-OCR')
+
+    # Set the Tesseract executable path
+    pyt.pytesseract.tesseract_cmd = os.path.join(tesseract_folder, 'tesseract.exe')
+    log_debug(f"TESSERACT_PATH: {tesseract_folder}")
 
     def find_text_and_click(self, text, click_type=gui.PRIMARY, click_duration=0.1, region=None, config=None):
         """

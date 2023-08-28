@@ -36,6 +36,7 @@ def main():
 # Main code logic to perform actions
 def play(pgd):
     
+    pgd.find_text_and_click("Run")
     pgd.get_active_window()
     pgd.find_image_on_screen_and_click()
     pgd.color_present_on_screen(color="#292D3E")
