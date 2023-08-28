@@ -30,4 +30,4 @@ Current setup:
         pyt.pytesseract.tesseract_cmd = "C:/Users/[YOUR USER]/pyguidesktop/Tesseract-OCR/tesseract.exe"
 - ✔️ You are ready to use PyGUIDesktop
 - 📍 Work can be done is test.py
-- 🟢 To execute script run main.py 
+- 🟢 To execute script run main.py
