@@ -12,3 +12,6 @@ Pipfile.lock
 
 # Ignore pycache
 __pycache__/
+
+# Ignore .vscode
+/.vscode
