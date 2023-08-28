@@ -31,9 +31,7 @@ Current setup:
 - 🟢 To execute script run main.py
 
 Structure of the project:
-$ tree
-.
-PyGUIDesktop/
+```PyGUIDesktop/
 │
 ├── assets/
 │   └── # Images and files we use as templates (for template_matching for example)
@@ -61,3 +59,4 @@ PyGUIDesktop/
 └── setup_venv.bat
 
 5 directories, 6 files
+```
