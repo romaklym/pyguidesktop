@@ -35,7 +35,8 @@ class PyGUIDesktop(GUIDesktop):
 
     def find_text_coordinates(self, text, click_type=gui.PRIMARY, click_duration=0.1, region=None, config=None, preprocess_image=False):
         """
-        Find the specified text on the screen using pytesseract and click in the middle of the found text.
+        Finds all coordinates of the text we are looking for, if its one word returns the middle coordinates of that word, if two or 
+        more words, calculates the middle of those words and returns it
 
         :param text: The text to search for.
         :param click_type: The type of mouse click to perform (PRIMARY or SECONDARY).
