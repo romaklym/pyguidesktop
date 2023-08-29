@@ -32,8 +32,7 @@ git clone https://github.com/romaklym/pyguidesktop.git
         You can find it here: https://github.com/UB-Mannheim/tesseract/wiki (Under: The latest installer can be downloaded here)
 
 - ✔️ You are ready to use PyGUIDesktop
-- 📍 Work can be done is tests.py
-- 🟢 To execute script run: main.py
+- 🟢 Work can be done in main.py, run this file for your tests
 
 Structure of the project:
 ```PyGUIDesktop/
