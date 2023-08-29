@@ -280,6 +280,25 @@ class GUIDesktop:
         log_debug(f"Screenshots saved in folder: {gray_image_path}")
         
         return gray_image
+    
+    def process_image(self, image=None, resize_factor=2, screenshot_name=default_screenshot):
+        """
+        Resizes an image and saves it in a new folder with the current date and time as the name.
+
+        Args:
+            image (str): path to the image to be processed.
+            screenshot_name (str, optional): Name of the new processed image. Defaults to default_screenshot.
+        """
+        if image is None:
+            image_path = self.save_screenshot(screenshot_name=screenshot_name)
+            image = cv2.imread(image_path)
+            resized_image = cv2.resize(image, None, fx=resize_factor, fy=resize_factor)
+            
+        else:
+            image = cv2.imread(image)
+            resized_image = cv2.resize(image, None, fx=resize_factor, fy=resize_factor)
+            
+        return resized_image
 
     def write(self, message, interval=0.25):
         """

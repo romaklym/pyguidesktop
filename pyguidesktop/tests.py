@@ -9,7 +9,7 @@ def main():
         
         pgd = PyGUIDesktop()
         
-        desired_window = "main.py - pyguidesktop - Visual Studio Code"
+        desired_window = "New Tab - Google Chrome"
         timeout = 60
         
         # Checks if the desired window becomes active within a timeout
@@ -37,9 +37,10 @@ def main():
 def play(pgd):
     
     app_path = r"C:\Program Files (x86)\Steam\steam.exe"
-    pgd.hough_lines()
+    # pgd.hough_lines()
     # pgd.launch_app(app_path)
-    # pgd.find_text_and_click("Run")
+    sleep(7)
+    pgd.find_text_and_click("secure email")
     # pgd.get_active_window()
     # pgd.find_image_on_screen_and_click()
     # pgd.color_present_on_screen("#292D3E")
