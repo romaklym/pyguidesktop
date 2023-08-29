@@ -1,4 +1,4 @@
-from .guidesktop import GUIDesktop
+from pyguidesktop.guidesktop import GUIDesktop
 import pyautogui as gui
 import numpy as np
 import sys, os, re
@@ -11,8 +11,6 @@ from time import sleep
 from PIL import Image
 from .logger import log_debug
 from PIL import ImageGrab
-import supervision as sv
-from ultralytics import YOLO
 
 
 class PyGUIDesktop(GUIDesktop):
