@@ -11,6 +11,8 @@ numpy = "*"
 opencv-python = "*"
 pywin32 = "*"
 Pillow = "*"
+supervision = "*"
+ultralytics = "*"
 
 [dev-packages]
 autopep8 = "*"

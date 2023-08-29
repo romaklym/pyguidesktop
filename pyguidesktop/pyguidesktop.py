@@ -11,6 +11,8 @@ from time import sleep
 from PIL import Image
 from .logger import log_debug
 from PIL import ImageGrab
+import supervision as sv
+from ultralytics import YOLO
 
 
 class PyGUIDesktop(GUIDesktop):
@@ -300,8 +302,6 @@ class PyGUIDesktop(GUIDesktop):
         cv2.imwrite(self.folder_path+"\\template_matched.png", screen_image)
         
         return log_debug(f"Found image at: ({x_click}, {y_click})")
-    
-
 
 
                         
