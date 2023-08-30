@@ -10,7 +10,7 @@ def main():
         
         pgd = PyGUIDesktop()
         
-        desired_window = "New Tab - Google Chrome"
+        desired_window = "YOUR APP NAME"
         timeout = 60
         
         # Checks if the desired window becomes active within a timeout
@@ -37,15 +37,14 @@ def main():
 # Main code logic to perform actions
 def play(pgd):
     
-    app_path = r"C:\Program Files (x86)\Steam\steam.exe"
+    app_path = r"APP_PATH"
     # pgd.hough_lines()
-    # pgd.launch_app(app_path)
-    sleep(7)
-    # pgd.find_text_and_click("secure email")
-    pgd.find_text_coordinates("search google or")
+    # pgd.launch_app(APP_PATH)
+    # pgd.find_text_and_click("YOUR_TEXT")
+    # pgd.find_text_coordinates("YOUR_TEXT")
     # pgd.get_active_window()
     # pgd.find_image_on_screen_and_click()
-    # pgd.color_present_on_screen("#292D3E")
+    # pgd.color_present_on_screen("#YOUR_HEX_COLOR")
     # mouse_position = pgd.mouse_position()
     # pgd.pixel_color(mouse_position.x, mouse_position.y)
     

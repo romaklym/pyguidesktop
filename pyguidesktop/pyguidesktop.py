@@ -1,16 +1,11 @@
 from pyguidesktop.guidesktop import GUIDesktop
 import pyautogui as gui
-import numpy as np
-import sys, os, re
-from datetime import datetime
-import win32gui
+import os
 import pytesseract as pyt
 from pytesseract import Output
 import cv2
 from time import sleep
-from PIL import Image
-from .logger import log_debug
-from PIL import ImageGrab
+from pyguidesktop.logger import log_debug
 
 
 class PyGUIDesktop(GUIDesktop):
