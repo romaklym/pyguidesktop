@@ -10,7 +10,7 @@ def main():
         
         pgd = PyGUIDesktop()
         
-        desired_window = "YOUR APP NAME"
+        desired_window = "main.py - pyguidesktop - Visual Studio Code"
         timeout = 60
         
         # Checks if the desired window becomes active within a timeout
@@ -38,9 +38,10 @@ def main():
 def play(pgd):
     
     app_path = r"APP_PATH"
+    sleep(2)
     # pgd.hough_lines()
     # pgd.launch_app(APP_PATH)
-    # pgd.find_text_and_click("YOUR_TEXT")
+    pgd.find_text_and_click("Run")
     # pgd.find_text_coordinates("YOUR_TEXT")
     # pgd.get_active_window()
     # pgd.find_image_on_screen_and_click()
