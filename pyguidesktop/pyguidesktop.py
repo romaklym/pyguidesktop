@@ -6,7 +6,7 @@ import win32gui
 from time import sleep
 import time
 import cv2
-from .logger import log_debug
+from .logger import log_debug, is_same_folder
 import subprocess
 import winreg
 import pytesseract as pyt
@@ -18,14 +18,12 @@ class PyGUIDesktop:
             
         package_dir = os.path.dirname(os.path.abspath(__file__))
         main_folder = os.path.dirname(package_dir)
-        self.screenshots_dir = os.path.join(main_folder, "images")
-        if not os.path.exists(self.screenshots_dir):
-            os.makedirs(self.screenshots_dir)
-
         now = datetime.now()
         self.timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")
-        self.folder_path = os.path.join(self.screenshots_dir, self.timestamp)
-        os.makedirs(self.folder_path)
+        self.folder_path = os.path.join(main_folder, "logs", self.timestamp)
+
+        if not is_same_folder(self.timestamp):
+            os.makedirs(self.folder_path, exist_ok=True)
         self.BINARY_THRESHOLD = 120
     
     default_screenshot = "screenshot"
@@ -104,17 +102,11 @@ class PyGUIDesktop:
         """
 
         gui.moveTo(x=x, y=y, duration=duration, tween=tween, pause=pause)
-        log_debug(f"Moves cursor to location: x: {x}, y: {y}")
-
         sleep(timeout)
-
-        if gui.position() == (x, y):
-            log_debug(f"Successfully moved to {x}, {y}")
-            return True
-
-        else:
-            log_debug(f"Failed to move cursor to: {x}, {y}")
-            return False
+        success = gui.position() == (x, y)
+        
+        log_debug(f"{'Successfully' if success else 'Failed to'} move to {x}, {y}")
+        return success
 
     def move_mouse(self, x=None, y=None, duration=0):
         """
@@ -571,6 +563,35 @@ class PyGUIDesktop:
         self.upload_image(image=image, screenshot_name="all_lines_on_image")
         
         return all_lines_coords
+    
+    def find_color_coordinates(self, color: list, image=None):
+        
+        if image is None:
+            new_screenshot = self.save_screenshot(screenshot_name="find_color_coordinates_on_image")
+        
+            target_image = cv2.imread(new_screenshot)
+        else:
+            target_image = cv2.imread(image)
+
+        if color is not None and len(color) == 3:
+            target_color = color
+            log_debug(f"Target color is: {target_color}")
+        elif color is not None:
+            target_color = self.hex_to_rgb(color)
+            log_debug(f"From hex to rgb, rgb color is: {target_color}")
+        else:    
+            raise ValueError("Please provide a color value")
+        
+        target_color_bgr = target_color[::-1]
+
+        lower_bound = (target_color_bgr[0] - 10, target_color_bgr[1] - 10, target_color_bgr[2] - 10)
+        upper_bound = (target_color_bgr[0] + 10, target_color_bgr[1] + 10, target_color_bgr[2] + 10)
+        mask = cv2.inRange(target_image, lower_bound, upper_bound)
+        coordinates = cv2.findNonZero(mask)
+        
+        log_debug(f"All coordinates: {coordinates}")
+
+        return coordinates
     
     def find_text_coordinates(self, text, click_type=gui.PRIMARY, click_duration=0.1, region=None, config=None, preprocess_image=False):
         """
