@@ -37,25 +37,25 @@ git clone https://github.com/romaklym/pyguidesktop.git
 Structure of the project:
 ```PyGUIDesktop/
 │
+├── .venv/
+│
 ├── assets/
 │   └── # Images and files we use as templates (for template_matching for example)
-├── images/
-│   └── # Screenshots and images used in the project
+│
 ├── logs/
-│   └── # Logs that will be generated after main.py run
+│   └── # Logs, screenshots and images that will be generated after main.py run
 │
 ├── pyguidesktop/
 │   ├── __init__.py
-│   ├── guidedesktop.py
-│   ├── pyguidesktop.py
 │   ├── logger.py
-│   └── tests.py
+│   └── pyguidesktop.py
 │
 ├── Tesseract-OCR/
 │   ├── tesseract.exe
 │   └── ...
 │
 ├── .gitignore
+├── LICENSE
 ├── main.py
 ├── Pipfile
 ├── Pipfile.lock
