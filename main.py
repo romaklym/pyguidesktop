@@ -10,7 +10,7 @@ def main():
         
         pgd = PyGUIDesktop()
         
-        desired_window = "main.py - pyguidesktop - Visual Studio Code"
+        desired_window = "New Tab - Google Chrome"
         timeout = 60
         
         # Checks if the desired window becomes active within a timeout
@@ -38,13 +38,13 @@ def main():
 def play(pgd):
     
     app_path = r"APP_PATH"
-    sleep(2)
+    sleep(5)
     # pgd.hough_lines()
     # pgd.launch_app(APP_PATH)
-    pgd.find_color_coordinates("292D3E")
-    pgd.find_text_and_click("Run")
-    pgd.find_text_coordinates("Run")
-    pgd.get_active_window()
+    # pgd.find_color_coordinates("292D3E")
+    pgd.find_text_and_click("Search Google")
+    # pgd.find_text_coordinates("Run")
+    # pgd.get_active_window()
     # pgd.find_image_on_screen_and_click()
     # pgd.color_present_on_screen("#YOUR_HEX_COLOR")
     # mouse_position = pgd.mouse_position()
