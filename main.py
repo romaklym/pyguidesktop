@@ -40,9 +40,10 @@ def play(pgd):
     app_path = r"APP_PATH"
     sleep(5)
     # pgd.hough_lines()
+    pgd.find_text_and_click_easyocr("Search Google")
     # pgd.launch_app(APP_PATH)
     # pgd.find_color_coordinates("292D3E")
-    pgd.find_text_and_click("Search Google")
+    # pgd.find_text_and_click("Search Google")
     # pgd.find_text_coordinates("Run")
     # pgd.get_active_window()
     # pgd.find_image_on_screen_and_click()

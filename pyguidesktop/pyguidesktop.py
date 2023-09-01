@@ -6,12 +6,12 @@ import win32gui
 from time import sleep
 import time
 import cv2
-from .logger import log_debug, is_same_folder
+from logger import log_debug, is_same_folder
 import subprocess
 import winreg
 import pytesseract as pyt
 from pytesseract import Output
-
+import input as inp
 
 class PyGUIDesktop:
     def __init__(self):
@@ -73,14 +73,17 @@ class PyGUIDesktop:
 
         return region
 
-    def mouse_position(self):
+    def mouse_position(self, input=False):
         """
             Returns Position of the cursor on the screen as Tuple.
             Format: x, y
         """
-
-        position = gui.position()
-        log_debug(f"Mouse position at: {position}")
+        if not input:
+            position = gui.position()
+            log_debug(f"Mouse position at: {position}")
+        else:
+            position = inp.position()
+            log_debug(f"Mouse position at: {position}")
 
         return position
     
@@ -95,15 +98,19 @@ class PyGUIDesktop:
 
         return coordinates_on_screen
     
-    def move_to(self, x=0, y=0, timeout=None, duration=0.1, tween=gui.linear, pause=True):
+    def move_to(self, x=0, y=0, timeout=None, input=False, duration=0.1, tween=gui.linear, pause=True):
         """
             Moves cursor to location on the screen specified as arguments.
             Format: True, False
         """
-
-        gui.moveTo(x=x, y=y, duration=duration, tween=tween, pause=pause)
-        sleep(timeout)
-        success = gui.position() == (x, y)
+        if not input:
+            gui.moveTo(x=x, y=y, duration=duration, tween=tween, pause=pause)
+            sleep(timeout)
+            success = gui.position() == (x, y)
+        else:
+            inp.moveTo(x=x, y=y, duration=duration, tween=tween, pause=pause)
+            sleep(timeout)
+            success = inp.position() == (x, y)
         
         log_debug(f"{'Successfully' if success else 'Failed to'} move to {x}, {y}")
         return success
@@ -141,27 +148,87 @@ class PyGUIDesktop:
 
         return None
     
-    def click(self, clicks=1, interval=0, button=gui.PRIMARY, duration=0, tween=gui.linear, pause=True):
+    def key_down(self, key, input=False, pause=True):
+        """
+        Presses key down.
+
+        """
+        if key is None:
+            raise ValueError("Cannot leave key argument empty")
+        
+        if not input:
+            gui.keyDown(key=key, pause=pause)
+            log_debug(f"Pressed this button: {key}")
+        else:
+            inp.keyDown(key=key, pause=pause)
+            log_debug(f"Pressed this button: {key}")
+            
+        return True
+    
+    def key_up(self, key, input=False, pause=True):
+        """
+        Presses key up.
+
+        """
+        if key is None:
+            raise ValueError("Cannot leave key argument empty")
+        
+        if not input:
+            gui.keyUp(key=key, pause=pause)
+            log_debug(f"Pressed this button: {key}")
+        else:
+            inp.keyUp(key=key, pause=pause)
+            log_debug(f"Pressed this button: {key}")
+            
+        return True
+    
+    def press(self, key, input=False, pause=True):
+        """
+        Presses key down and releases.
+
+        """
+        if key is None:
+            raise ValueError("Cannot leave key argument empty")
+        
+        if not input:
+            gui.press(key=key, pause=pause)
+            log_debug(f"Pressed this button: {key}")
+        else:
+            inp.press(key=key, pause=pause)
+            log_debug(f"Pressed this button: {key}")
+            
+        return True
+    
+    def click(self, clicks=1, interval=0, input=False, button=gui.PRIMARY, duration=0, tween=gui.linear, pause=True):
         """
             Mouse click.
             Format: None
         """
-
-        gui.click(clicks=clicks, interval=interval, button=button,
-                  duration=duration, tween=tween, pause=pause)
-        log_debug(f"Clicks this many times: {clicks}, with this button: {button}")
-
+        if not input:
+            gui.click(clicks=clicks, interval=interval, button=button,
+                    duration=duration, tween=tween, pause=pause)
+            log_debug(f"Clicks this many times: {clicks}, with this button: {button}")
+        else:
+            inp.click(clicks=clicks, interval=interval, button=button,
+                    duration=duration, tween=tween, pause=pause)
+            log_debug(f"Clicks this many times: {clicks}, with this button: {button}")
+            
         return None
     
-    def double_click(self, x=None, y=None, interval=0, button=gui.LEFT, duration=0, tween=gui.linear, pause=True):
+    def double_click(self, x=None, y=None, interval=0, input=False, button=gui.LEFT, duration=0, tween=gui.linear, pause=True):
         """
             Double Mouse click.
             Format: None
         """
 
-        gui.doubleClick(x=x, y=y, interval=interval, button=button,
+        if not input:
+            gui.doubleClick(x=x, y=y, interval=interval, button=button,
                         duration=duration, tween=tween, pause=pause)
-        log_debug(f"Double clicks at x: {x}, y: {y} with this button: {button}")
+            log_debug(f"Double clicks at x: {x}, y: {y} with this button: {button}")
+        else:
+            inp.doubleClick(x=x, y=y, interval=interval, button=button,
+                        duration=duration, tween=tween, pause=pause)
+            log_debug(f"Double clicks at x: {x}, y: {y} with this button: {button}")
 
         return None
     
@@ -859,5 +926,17 @@ class PyGUIDesktop:
         cv2.rectangle(screen_image, max_loc, (max_loc[0] + w, max_loc[1] + h), (0, 255, 255), 2)
         cv2.imwrite(self.folder_path+"\\template_matched.png", screen_image)
         
-        return log_debug(f"Found image at: ({x_click}, {y_click})")    
+        return log_debug(f"Found image at: ({x_click}, {y_click})")
+    
+    # def find_text_and_click_easyocr(self, text, image=None, click_type=gui.PRIMARY, click_duration=0.1):
+    #     reader = easyocr.Reader(['en'])
         
+    #     if image is None:
+    #         screenshot = self.save_screenshot()
+    #     else:
+    #         screenshot = cv2.imread(image)
+            
+    #     result = reader.readtext(screenshot)
+    #     log_debug(f"Found image at these coords: ({result}")
+        
+    #     return result

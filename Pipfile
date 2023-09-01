@@ -13,6 +13,9 @@ pywin32 = "*"
 Pillow = "*"
 supervision = "*"
 ultralytics = "*"
+easyocr = "*"
+torchvision = "*"
+torchaudio = "*"
 
 [dev-packages]
 autopep8 = "*"
