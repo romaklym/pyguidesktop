@@ -47,6 +47,7 @@ Structure of the project:
 │
 ├── pyguidesktop/
 │   ├── __init__.py
+│   ├── input.py
 │   ├── logger.py
 │   └── pyguidesktop.py
 │
