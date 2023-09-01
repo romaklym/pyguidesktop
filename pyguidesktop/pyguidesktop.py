@@ -115,14 +115,17 @@ class PyGUIDesktop:
         log_debug(f"{'Successfully' if success else 'Failed to'} move to {x}, {y}")
         return success
 
-    def move_mouse(self, x=None, y=None, duration=0):
+    def move_mouse(self, x=None, y=None, input=False, duration=0):
         """
             Moves mouse by specified set of pixels provided by an arguments.
             Format: None
         """
-
-        gui.move(x=x, y=y, duration=duration)
-        log_debug(f"Moved mouse by x pixels: {x}, and y pixels: {y}")
+        if not input:
+            gui.move(x=x, y=y, duration=duration)
+            log_debug(f"Moved mouse by x pixels: {x}, and y pixels: {y}")
+        else:
+            inp.move(x=x, y=y, duration=duration)
+            log_debug(f"Moved mouse by x pixels: {x}, and y pixels: {y}")
 
         return None
     
@@ -163,7 +166,7 @@ class PyGUIDesktop:
             inp.keyDown(key=key, pause=pause)
             log_debug(f"Pressed this button: {key}")
             
-        return True
+        return None
     
     def key_up(self, key, input=False, pause=True):
         """
@@ -180,7 +183,7 @@ class PyGUIDesktop:
             inp.keyUp(key=key, pause=pause)
             log_debug(f"Pressed this button: {key}")
             
-        return True
+        return None
     
     def press(self, key, input=False, pause=True):
         """
@@ -197,7 +200,7 @@ class PyGUIDesktop:
             inp.press(key=key, pause=pause)
             log_debug(f"Pressed this button: {key}")
             
-        return True
+        return None
     
     def click(self, clicks=1, interval=0, input=False, button=gui.PRIMARY, duration=0, tween=gui.linear, pause=True):
         """
